@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:dt="http://www.thymeleaf.org/dandelion/datatables">
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th {
+            height: 50px;
+            text-align: center;
+        }
+        td {
+            padding: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #5F9EA0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        .inner {
+            float: left; margin: 5px;
+        }
+        #filter {
+            height: 500px; overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div>
+    <div class="inner" >
+        <form action="#" th:action="@{/ingested/sorted}" method="GET">
+            <p>Sort options:</p>
+            <select name="sortBy">
+                <option th:value="clientName">Sort by: Client Name</option>
+                <option th:value="clientId">Sort by: Client ID</option>
+                <option th:value="inputDate">Sort by: Input Date</option>
+                <option th:value="amount">Sort by: Amount</option>
+                <option th:value="fileMetaDataId">Sort by: File MetaData ID</option>
+                <option th:value="fileName">Sort by: File Name</option>
+                <option th:value="sourceId">Sort by: Source ID</option>
+                <option th:value="provider">Sort by: Provider</option>
+            </select>
+            <input type="submit" value="Sort"/>
+        </form>
+
+        <form action="#" th:action="@{/ingested/filtered}" method="GET">
+            <p>Filter by Client Name:</p>
+            <div id="filter">
+                <div th:each="client : ${clients}">
+                    <input type="checkbox" name="filterBy" th:value="${client}" />
+                    <label th:text="${client}"></label>
+                </div>
+            </div>
+            <input type="submit" value="Filter by"/>
+        </form>
+    </div>
+
+    <div class="inner">
+        <table id="myTableId" dt:table="true">
+            <thead>
+            <tr>
+                <th>Client Name</th>
+                <th>Client ID</th>
+                <th>Input Date</th>
+                <th>Amount</th>
+                <th>File MetaData ID</th>
+                <th>File Name</th>
+                <th>Source ID</th>
+                <th>Provider</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="record : ${records}">
+                <td th:text="${record.getClientName()}"></td>
+                <td th:text="${record.getClientId()}"></td>
+                <td th:text="${record.getInputDate()}"></td>
+                <td th:text="${record.getAmount()}"></td>
+                <td th:text="${record.getFileMetaDataId()}"></td>
+                <td th:text="${record.getFileName()}"></td>
+                <td th:text="${record.getSourceId()}"></td>
+                <td th:text="${record.getProvider()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

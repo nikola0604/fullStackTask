@@ -1,0 +1,19 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.deploy.fullstacktask.server.storage.StorageProperties",
+      "name": "storage",
+      "type": "com.deploy.fullstacktask.server.storage.StorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.deploy.fullstacktask.server.storage.StorageProperties",
+      "defaultValue": "upload-dir",
+      "name": "storage.location",
+      "description": "Folder location for storing files",
+      "type": "java.lang.String"
+    }
+  ]
+}
