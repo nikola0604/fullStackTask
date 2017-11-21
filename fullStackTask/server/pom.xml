@@ -67,6 +67,11 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi</artifactId>
+	    <version>3.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -75,6 +80,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+      <plugin>
+         <artifactId>maven-war-plugin</artifactId>
+         <configuration>
+           <archive>
+             <manifest>
+               <addClasspath>true</addClasspath>
+               <classpathPrefix>lib/</classpathPrefix>
+             </manifest>
+           </archive>
+         </configuration>
+      </plugin>
 		</plugins>
 	</build>
 
