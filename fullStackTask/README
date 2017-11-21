@@ -5,16 +5,5 @@ Za parsiranje fajla sam koristio apache.poi biblioteku (https://poi.apache.org/)
   Nazalost nisam stigao da implementiram potrebne provere: ekstenzije, kolona i popunjenosti.
   Smatra se da fajl po strukturi i tipu odgovara test primeru ingestion_datasheet.xls
 
-Client i Server se podizu na ugradjenom Tomcat-u, konfigurisani port za client je podrazumevani 8080, za server je 8090.
-Ingestor strani se pristupa na http://localhost:8080. Submit-om upload-a se gadja localhost:8090/ endpoint FileUploadController-a
-koji je zaduzen za upisivanje fajla u generisani direktorijum "upload-dir" i vrsi se redirekcija na localhost:8090/ingest endpoint
-IngestController-a gde se fajl parsira i vrsi se upis podataka u bazu. Deduplikacija podataka se vrsi pri upisu u bazu.
-Po import-u u bazu vrsi se redirekcija na localost:8090/ingested endpoint DatabaseController-a koji izvrsava potrebne upite 
-nad bazom i vraca view na kom je prikazana tabela sa unetim podacima, kao i forms za sortiranje i filterisanje. 
-Po submit-u form-a za sortiranje gadja se localhost:8090/ingested/sorted endpoint DatabaseController-a koji izvrsava
-upit nad pazom sa odgovarajucim parametrom koji je prosledjen http request-om i popunjava tabelu na ingested view.
-Po submit-u form-a za filterisanje gadja se localhost:8090/ingested/filtered endpoint DatabaseController-a koji izvrsava
-upit nad pazom sa odgovarajucim parametrom koji je prosledjen http request-om i vraca ingestedFiltered view koji samo prikazuje
-zeljene podatke filterisane po clientName-u. Nisam implementirao sortiranje filterisanih podatak, takodje se mora vratiti na 
-ingested view i radi promene parametara za filterisanje. 
+Client i Server se podizu na ugradjenom Tomcat-u, konfigurisani port za client je podrazumevani 8080, za server je 8090. Ingestor strani se pristupa na http://localhost:8080. Submit-om upload-a se gadja localhost:8090/ endpoint FileUploadController-a koji je zaduzen za upisivanje fajla u generisani direktorijum "upload-dir" i vrsi se redirekcija na localhost:8090/ingest endpoint IngestController-a gde se fajl parsira i vrsi se upis podataka u bazu. Deduplikacija podataka se vrsi pri upisu u bazu.Po import-u u bazu vrsi se redirekcija na localost:8090/ingested endpoint DatabaseController-a koji izvrsava potrebne upite nad bazom i vraca view na kom je prikazana tabela sa unetim podacima, kao i forms za sortiranje i filterisanje. Po submit-u form-a za sortiranje gadja se localhost:8090/ingested/sorted endpoint DatabaseController-a koji izvrsava upit nad pazom sa odgovarajucim parametrom koji je prosledjen http request-om i popunjava tabelu na ingested view. Po submit-u form-a za filterisanje gadja se localhost:8090/ingested/filtered endpoint DatabaseController-a koji izvrsava upit nad pazom sa odgovarajucim parametrom koji je prosledjen http request-om i vraca ingestedFiltered view koji samo prikazuje zeljene podatke filterisane po clientName-u. Nisam implementirao sortiranje filterisanih podatak, takodje se mora vratiti na ingested view i radi promene parametara za filterisanje. 
 
