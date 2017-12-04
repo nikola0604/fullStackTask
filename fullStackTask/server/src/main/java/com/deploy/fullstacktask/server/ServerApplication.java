@@ -11,6 +11,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 
@@ -41,6 +42,12 @@ public class ServerApplication extends SpringBootServletInitializer
 		driver.setPassword(password);
 
 		return driver;
+	}
+	
+	@Bean
+	public RestTemplate restTemplate()
+	{
+		return new RestTemplate();
 	}
 	
 	@Bean

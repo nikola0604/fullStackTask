@@ -36,8 +36,8 @@
 
 
 <div>
-    <div class="inner" >
-        <form action="#" th:action="@{/ingested/sorted}" method="GET">
+    <div class="inner">
+        <form action="http://localhost:8090/retrieve" method="POST">
             <p>Sort options:</p>
             <select name="sortBy">
                 <option th:value="clientName">Sort by: Client Name</option>
@@ -49,10 +49,10 @@
                 <option th:value="sourceId">Sort by: Source ID</option>
                 <option th:value="provider">Sort by: Provider</option>
             </select>
-            <input type="submit" value="Sort"/>
+            <input type="submit" value="Sort" />
         </form>
 
-        <form action="#" th:action="@{/ingested/filtered}" method="GET">
+        <form action="http://localhost:8090/retrieve" method="POST">
             <p>Filter by Client Name:</p>
             <div id="filter">
                 <div th:each="client : ${clients}">
@@ -80,14 +80,14 @@
             </thead>
             <tbody>
             <tr th:each="record : ${records}">
-                <td th:text="${record.getClientName()}"></td>
-                <td th:text="${record.getClientId()}"></td>
-                <td th:text="${record.getInputDate()}"></td>
-                <td th:text="${record.getAmount()}"></td>
-                <td th:text="${record.getFileMetaDataId()}"></td>
-                <td th:text="${record.getFileName()}"></td>
-                <td th:text="${record.getSourceId()}"></td>
-                <td th:text="${record.getProvider()}"></td>
+                <td th:text="${record.clientName}"></td>
+                <td th:text="${record.clientId}"></td>
+                <td th:text="${record.inputDate}"></td>
+                <td th:text="${record.amount}"></td>
+                <td th:text="${record.fileMetaDataId}"></td>
+                <td th:text="${record.fileName}"></td>
+                <td th:text="${record.sourceId}"></td>
+                <td th:text="${record.provider}"></td>
             </tr>
             </tbody>
         </table>

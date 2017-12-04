@@ -1,7 +1,7 @@
 package com.deploy.fullstacktask.server.storage;
 
-public class StorageException extends RuntimeException {
-
+public class StorageException extends RuntimeException
+{
     public StorageException(String message) {
         super(message);
     }

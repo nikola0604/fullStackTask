@@ -1,46 +1,55 @@
 package com.deploy.fullstacktask.server.controllers;
 
 import com.deploy.fullstacktask.server.services.RecordService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Controller
 public class DatabaseController
 {
-	@Autowired
-	RecordService service;
+	private RecordService service;
+	private RestTemplate restTemplate;
+	private StringBuilder filterBy = new StringBuilder();
+	private URI uri;
 	
-	@RequestMapping(value = "/ingested", method = RequestMethod.GET)
-	public String displayIngested(@Param("filterBy") String filterBy, Model md)
+	@Autowired DatabaseController(RecordService service, RestTemplate restTemplate)
 	{
-		md.addAttribute("records", service.findAll());
-		md.addAttribute("clients", service.generateFilterByClients());
-		return "ingested";
+		this.service = service;
+		this.restTemplate = restTemplate;
 	}
 	
-	@RequestMapping(value = "/ingested/sorted", method = RequestMethod.GET)
-	public String displayIngestedSortedBy(@RequestParam("sortBy") String sortBy, Model md)
+	@RequestMapping(value = "/retrieve")
+	public String dataRetrieval(@Param("filterBy") String filterBy, @Param("sortBy") String sortBy, ModelMap mp)
 	{
-		md.addAttribute("records", service.findAllSortedBy(sortBy));
-		md.addAttribute("clients", service.generateFilterByClients());
-		return "ingested";
-	}
-	
-	@RequestMapping(value = "/ingested/filtered", method = RequestMethod.GET)
-	public String displayIngestedFilteredBy(@RequestParam("filterBy") String filterBy, Model md)
-	{
-		md.addAttribute("records", service.findAllFilteredBy(filterBy));
+		if(filterBy!=null)
+			if(!filterBy.isEmpty())
+			{
+				this.filterBy.delete(0, this.filterBy.length()).append(filterBy);
+			}
 		
-		return "ingestedFiltered";
+		mp.addAttribute("records", service.findAll(sortBy, this.filterBy.toString()));
+		mp.addAttribute("clients", service.generateFilterByClients());
+		
+		try
+		{
+			uri = new URI("http://localhost:8080/ingest");
+		}
+		catch (URISyntaxException ue)
+		{
+			ue.printStackTrace();
+		}
+
+		restTemplate.postForObject(uri, mp, HttpStatus.class);
+
+		return "redirect:http://localhost:8080/ingested";
 	}
 }

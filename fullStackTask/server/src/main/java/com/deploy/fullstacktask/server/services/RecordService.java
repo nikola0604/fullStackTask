@@ -30,53 +30,30 @@ public class RecordService
 		return template.query(sql, rm);
 	}
 	
-	public List<Records> findAll()
+	public List<Records> findAll(String sortBy, String filterBy)
 	{
 		String sql = "SELECT DISTINCT clientName, Client.clientId, inputDate, amount, FileMetaData.fileMetaDataId, fileName, sourceId, provider " +
-				"FROM Requirement JOIN Client on Requirement.clientId = Client.clientId " +
-				"JOIN FileMetaData ON Requirement.fileMetaDataId = FileMetaData.filemetadataid ";
+				"FROM Requirement LEFT OUTER JOIN Client on Requirement.clientId = Client.clientId " +
+				"LEFT OUTER JOIN FileMetaData ON Requirement.fileMetaDataId = FileMetaData.filemetadataid";
 		
-		RowMapper<Records> rm = (resultSet, i) ->
+		if (filterBy != null)
 		{
-			Records record = new Records(resultSet.getString(1), resultSet.getString(2),
-					resultSet.getString(3), resultSet.getInt(4), resultSet.getString(5),
-					resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
-			
-			return record;
-		};
+			if (!filterBy.isEmpty())
+			{
+				filterBy = filterBy.replaceAll(",", "','");
+				
+				sql = sql.concat(" WHERE clientName IN ('" + filterBy + "')");
+			}
+		}
 		
-		return template.query(sql, rm);
-	}
-	
-	public List<Records> findAllSortedBy(String sortBy)
-	{
-		String sql = "SELECT DISTINCT clientName, Client.clientId, inputDate, amount, FileMetaData.fileMetaDataId, fileName, sourceId, provider " +
-				"FROM Requirement JOIN Client on Requirement.clientId = Client.clientId " +
-				"JOIN FileMetaData ON Requirement.fileMetaDataId = FileMetaData.filemetadataid " +
-				"ORDER BY " + sortBy;
-		
-		RowMapper<Records> rm = (resultSet, i) ->
+		if(sortBy != null)
 		{
-			Records record = new Records(resultSet.getString(1), resultSet.getString(2),
-					resultSet.getString(3), resultSet.getInt(4), resultSet.getString(5),
-					resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
-			
-			return record;
-		};
+			if (!sortBy.isEmpty())
+			{
+				sql = sql.concat(" ORDER BY " + sortBy);
+			}
+		}
 		
-		return template.query(sql, rm);
-	}
-	
-	public List<Records> findAllFilteredBy(String filterBy)
-	{
-		filterBy = filterBy.replaceAll(",", "','");
-		
-		String sql = "SELECT DISTINCT clientName, Client.clientId, inputDate, amount, FileMetaData.fileMetaDataId, fileName, sourceId, provider " +
-				"FROM Requirement JOIN Client on Requirement.clientId = Client.clientId " +
-				"JOIN FileMetaData ON Requirement.fileMetaDataId = FileMetaData.filemetadataid " +
-				"WHERE clientName IN (\'" + filterBy + "\')";
-		
-		System.out.println(sql);
 		RowMapper<Records> rm = (resultSet, i) ->
 		{
 			Records record = new Records(resultSet.getString(1), resultSet.getString(2),
